@@ -5,7 +5,7 @@
 		"nette/di": "^2.4",
 		"nette/utils": "^2.4",
 		"latte/latte": "^2.4",
-		"nette/caching": "^2.5",
+		"nette/caching": "^2.5"
 	},
 	"autoload": {
 		"psr-4": {
