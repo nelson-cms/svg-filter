@@ -9,7 +9,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Nelson\\Latte\\Filters\\SvgFilter": "src/"
+			"Nelson\\Latte\\Filters\\SvgFilter\\": "src/"
 		}
 	}
 }
