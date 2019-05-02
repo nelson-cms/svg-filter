@@ -1,63 +1,47 @@
 <?php
+declare(strict_types=1);
 
 namespace Nelson\Latte\Filters\SvgFilter\DI;
 
-use Latte\Engine;
 use Nelson\Latte\Filters\SvgFilter\SvgFilter;
-use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Nette\DI\CompilerExtension;
-use Nette\DI\ServiceDefinition;
+use Nette\DI\Definitions\FactoryDefinition;
+use Nette\Schema\Expect;
+use Nette\Schema\Schema;
 
 final class SvgFilterExtension extends CompilerExtension
 {
+	public function getConfigSchema(): Schema
+	{
+		return Expect::structure([
+			'cacheNS' => Expect::string('inline-svg'),
+			'assetsPath' => Expect::string()->required(),
+		]);
+	}
 
-	/** @var array */
-	protected $defaults = [
-		'cacheNS' => 'inline-svg',
-		'assetsPath' => '%project.paths.assetsDir%',
-	];
 
-
-	public function loadConfiguration()
+	public function loadConfiguration(): void
 	{
 		$builder = $this->getContainerBuilder();
-		$config = $this->getConfig($this->defaults);
+		$config = $this->getConfig();
 		$builder->addDefinition($this->prefix('default'))
 			->setClass(SvgFilter::class)
 			->addSetup('setup', [$config]);
 	}
 
 
-	public function beforeCompile()
+	public function beforeCompile(): void
 	{
 		$builder = $this->getContainerBuilder();
 
-		$registerToLatte = function (ServiceDefinition $def) {
-			$def->addSetup('addFilter', ['svg', [$this->prefix('@default'), 'inline']]);
-		};
-
-		$latteFactoryService = $builder->getByType(ILatteFactory::class);
-		if (!$latteFactoryService || !self::isOfType($builder->getDefinition($latteFactoryService)->getClass(), Engine::class)) {
-			$latteFactoryService = 'nette.latteFactory';
+		// Latte filter
+		$latteFactoryName = 'latte.latteFactory';
+		if ($builder->hasDefinition($latteFactoryName)) {
+			/** @var FactoryDefinition $latteFactory */
+			$latteFactory = $builder->getDefinition($latteFactoryName);
+			$latteFactory
+				->getResultDefinition()
+				->addSetup('addFilter', ['svg', [$this->prefix('@default'), 'inline']]);
 		}
-
-		if ($builder->hasDefinition($latteFactoryService) && self::isOfType($builder->getDefinition($latteFactoryService)->getClass(), Engine::class)) {
-			$registerToLatte($builder->getDefinition($latteFactoryService));
-		}
-
-		if ($builder->hasDefinition('nette.latte')) {
-			$registerToLatte($builder->getDefinition('nette.latte'));
-		}
-	}
-
-
-	/**
-	 * @param string $class
-	 * @param string $type
-	 * @return bool
-	 */
-	private static function isOfType($class, $type)
-	{
-		return $class === $type || is_subclass_of($class, $type);
 	}
 }

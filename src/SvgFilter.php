@@ -1,57 +1,50 @@
 <?php
+declare(strict_types=1);
 
 namespace Nelson\Latte\Filters\SvgFilter;
 
-use DOMElement;
 use DOMDocument;
+use DOMElement;
 use Nette\Caching\Cache;
 use Nette\Caching\IStorage;
 use Nette\SmartObject;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Html;
+use stdClass;
 
-class SvgFilter
+final class SvgFilter
 {
 	use SmartObject;
 
-
 	/** @var string */
-	protected $assetsPath;
+	private $assetsPath;
 
 	/** @var Cache */
-	protected $cache;
+	private $cache;
 
 	/** @var IStorage */
-	protected $cacheStorage;
+	private $cacheStorage;
 
 
-	/**
-	 * @param string   $assetsPath
-	 * @param IStorage $cacheStorage
-	 */
 	public function __construct(IStorage $cacheStorage)
 	{
 		$this->cacheStorage = $cacheStorage;
 	}
 
 
-	/**
-	 * @param  array  $config
-	 * @return void
-	 */
-	public function setup(array $config)
+	public function setup(stdClass $config): void
 	{
-		$this->assetsPath = $config['assetsPath'];
-		$this->cache = new Cache($this->cacheStorage, $config['cacheNS']);
+		$this->assetsPath = $config->assetsPath;
+		$this->cache = new Cache($this->cacheStorage, $config->cacheNS);
 	}
 
 
-	/**
-	 * @param  string $file
-	 * @return Html|void
-	 */
-	public function inline($file, $width = null, $height = null, $fill = null)
-	{
+	public function inline(
+		string $file,
+		float $width = null,
+		float $height = null,
+		string $fill = null
+	): ?Html {
 		if (!empty($file)) {
 			$filepath = $this->assetsPath . $file;
 
@@ -60,21 +53,20 @@ class SvgFilter
 			$document = $this->getDOMDocument($rawString);
 			$element = $this->getSVGElement($document);
 
-			$element = $this->applyDimensions($element, $width, $height);
-			$element = $this->applyFill($element, $fill);
+			$this->applyDimensions($element, $width, $height);
+			$this->applyFill($element, $fill);
 
 			if (!empty($document)) {
-				return Html::el()->setHtml($document->saveHTML());
+				$html = $this->saveHtml($document) ?? '';
+				return Html::el()->setHtml($html);
 			}
 		}
+
+		return null;
 	}
 
 
-	/**
-	 * @param  string $filepath
-	 * @return string
-	 */
-	public function getSvg($filepath)
+	public function getSvg(string $filepath): ?string
 	{
 		$content = FileSystem::read($filepath);
 
@@ -84,35 +76,36 @@ class SvgFilter
 		$result = new DOMDocument();
 		$result->appendChild($result->importNode($element, true));
 
-		return $result->saveHTML();
+		return $this->saveHTML($result);
 	}
 
 
-	/**
-	 * @param  DOMElement $element
-	 * @param  string     $width
-	 * @param  string     $height
-	 * @return DOMElement
-	 */
-	protected function applyDimensions(DOMElement $element, $width, $height)
+	private function saveHtml(DOMDocument $document): ?string
 	{
-		if (empty($width) OR empty($height)) {
+		$html = $document->saveHTML();
+
+		if ($html === false) {
+			return null;
+		} else {
+			return $html;
+		}
+	}
+
+
+	private function applyDimensions(DOMElement $element, ?float $width, ?float $height): DOMElement
+	{
+		if (empty($width) or empty($height)) {
 			return $element;
 		}
 
-		$element->setAttribute('width', $width);
-		$element->setAttribute('height', $height);
+		$element->setAttribute('width', (string) $width);
+		$element->setAttribute('height', (string) $height);
 
 		return $element;
 	}
 
 
-	/**
-	 * @param  DOMElement $element
-	 * @param  string     $fill
-	 * @return DOMElement
-	 */
-	protected function applyFill(DOMElement $element, $fill)
+	private function applyFill(DOMElement $element, ?string $fill): DOMElement
 	{
 		if (empty($fill)) {
 			return $element;
@@ -124,11 +117,7 @@ class SvgFilter
 	}
 
 
-	/**
-	 * @param  string $svg
-	 * @return DOMDocument
-	 */
-	protected function getDOMDocument($svg)
+	private function getDOMDocument(string $svg): DOMDocument
 	{
 		$document = new DOMDocument();
 		$document->loadXML($svg);
@@ -137,12 +126,10 @@ class SvgFilter
 	}
 
 
-	/**
-	 * @param  DOMDocument $document
-	 * @return DOMElement
-	 */
-	protected function getSVGElement(DOMDocument $document)
+	private function getSVGElement(DOMDocument $document): DOMElement
 	{
-		return $document->getElementsByTagName('svg')->item(0);
+		/** @var DOMElement $element */
+		$element = $document->getElementsByTagName('svg')->item(0);
+		return $element;
 	}
 }
