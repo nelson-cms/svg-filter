@@ -11,12 +11,14 @@ use Nette\Schema\Schema;
 
 final class SvgFilterExtension extends CompilerExtension
 {
+
+	/** @var SvgFilterConfig[] */
+	public $config;
+
+
 	public function getConfigSchema(): Schema
 	{
-		return Expect::structure([
-			'cacheNS' => Expect::string('inline-svg'),
-			'assetsPath' => Expect::string()->required(),
-		]);
+		return Expect::from(new SvgFilterConfig);
 	}
 
 

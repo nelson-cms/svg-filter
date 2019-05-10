@@ -5,12 +5,12 @@ namespace Nelson\Latte\Filters\SvgFilter;
 
 use DOMDocument;
 use DOMElement;
+use Nelson\Latte\Filters\SvgFilter\DI\SvgFilterConfig;
 use Nette\Caching\Cache;
 use Nette\Caching\IStorage;
 use Nette\SmartObject;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Html;
-use stdClass;
 
 final class SvgFilter
 {
@@ -32,7 +32,7 @@ final class SvgFilter
 	}
 
 
-	public function setup(stdClass $config): void
+	public function setup(SvgFilterConfig $config): void
 	{
 		$this->assetsPath = $config->assetsPath;
 		$this->cache = new Cache($this->cacheStorage, $config->cacheNS);
