@@ -1,3 +1,12 @@
-vendor
+# Masks
+*.bak
+
+# Files
 composer.lock
-.idea
+.phpunit.result.cache
+
+# Dirs
+vendor/
+temp/
+.idea/
+

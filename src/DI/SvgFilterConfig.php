@@ -5,10 +5,6 @@ namespace Nelson\Latte\Filters\SvgFilter\DI;
 
 final class SvgFilterConfig
 {
-
-	/** @var string */
-	public $cacheNS = 'inline-svg';
-
-	/** @var string */
-	public $assetsPath;
+	public string $cacheNS = 'inline-svg';
+	public string $assetsPath;
 }

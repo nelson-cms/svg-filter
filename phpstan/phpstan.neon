@@ -1,13 +1,11 @@
 parameters:
-	autoload_directories:
-		 - src/
+	tmpDir: %currentWorkingDirectory%/temp/phpstan/
 
 	paths:
-		- src/
+		- %currentWorkingDirectory%/src/
+#		- %currentWorkingDirectory%/tests/
 
-	level: 7
+	excludePaths:
+		- %currentWorkingDirectory%/tests/temp/*
 
-
-includes:
-	- ../vendor/phpstan/phpstan-nette/extension.neon
-	- ../vendor/phpstan/phpstan-nette/rules.neon
+	level: 8

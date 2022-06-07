@@ -27,7 +27,7 @@ final class SvgFilterExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig();
 		$builder->addDefinition($this->prefix('default'))
-			->setClass(SvgFilter::class)
+			->setFactory(SvgFilter::class)
 			->addSetup('setup', [$config]);
 	}
 

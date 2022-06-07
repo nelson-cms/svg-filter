@@ -7,7 +7,7 @@ use DOMDocument;
 use DOMElement;
 use Nelson\Latte\Filters\SvgFilter\DI\SvgFilterConfig;
 use Nette\Caching\Cache;
-use Nette\Caching\IStorage;
+use Nette\Caching\Storage;
 use Nette\SmartObject;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Html;
@@ -16,19 +16,12 @@ final class SvgFilter
 {
 	use SmartObject;
 
-	/** @var string */
-	private $assetsPath;
-
-	/** @var Cache */
-	private $cache;
-
-	/** @var IStorage */
-	private $cacheStorage;
+	private string $assetsPath;
+	private Cache $cache;
 
 
-	public function __construct(IStorage $cacheStorage)
+	public function __construct(private Storage $cacheStorage)
 	{
-		$this->cacheStorage = $cacheStorage;
 	}
 
 
@@ -56,10 +49,8 @@ final class SvgFilter
 			$this->applyDimensions($element, $width, $height);
 			$this->applyFill($element, $fill);
 
-			if (!empty($document)) {
-				$html = $this->saveHtml($document) ?? '';
-				return Html::el()->setHtml($html);
-			}
+			$html = $this->saveHtml($document) ?? '';
+			return Html::el()->setHtml($html);
 		}
 
 		return null;
