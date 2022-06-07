@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Nelson\Latte\Filters\SvgFilter;
+namespace Nelson\SvgFilter;
 
 use DOMDocument;
 use DOMElement;
-use Nelson\Latte\Filters\SvgFilter\DI\SvgFilterConfig;
+use Nelson\SvgFilter\DI\SvgFilterConfig;
 use Nette\Caching\Cache;
 use Nette\Caching\Storage;
 use Nette\SmartObject;
@@ -16,18 +16,13 @@ final class SvgFilter
 {
 	use SmartObject;
 
-	private string $assetsPath;
 	private Cache $cache;
 
 
-	public function __construct(private Storage $cacheStorage)
-	{
-	}
-
-
-	public function setup(SvgFilterConfig $config): void
-	{
-		$this->assetsPath = $config->assetsPath;
+	public function __construct(
+		private Storage $cacheStorage,
+		private SvgFilterConfig $config,
+	) {
 		$this->cache = new Cache($this->cacheStorage, $config->cacheNS);
 	}
 
@@ -39,7 +34,7 @@ final class SvgFilter
 		string $fill = null
 	): ?Html {
 		if (!empty($file)) {
-			$filepath = $this->assetsPath . $file;
+			$filepath = $this->config->assetsPath . $file;
 
 			// Has to be string because of cache
 			$rawString = $this->cache->call([$this, 'getSvg'], $filepath);
@@ -64,7 +59,7 @@ final class SvgFilter
 		$document = $this->getDOMDocument($content);
 		$element = $this->getSVGElement($document);
 
-		$result = new DOMDocument();
+		$result = new DOMDocument;
 		$result->appendChild($result->importNode($element, true));
 
 		return $this->saveHTML($result);
@@ -85,7 +80,7 @@ final class SvgFilter
 
 	private function applyDimensions(DOMElement $element, ?float $width, ?float $height): DOMElement
 	{
-		if (empty($width) or empty($height)) {
+		if (empty($width) || empty($height)) {
 			return $element;
 		}
 
@@ -110,7 +105,7 @@ final class SvgFilter
 
 	private function getDOMDocument(string $svg): DOMDocument
 	{
-		$document = new DOMDocument();
+		$document = new DOMDocument;
 		$document->loadXML($svg);
 
 		return $document;

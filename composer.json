@@ -18,11 +18,11 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Nelson\\Latte\\Filters\\SvgFilter\\": "src/"
+			"Nelson\\SvgFilter\\": "src/"
 		}
 	},
 	"autoload-dev": {
-		"psr-4": { "Nelson\\Latte\\Filters\\SvgFilter\\Test\\": "tests/" }
+		"psr-4": { "Nelson\\SvgFilter\\Tests\\": "tests/" }
 	},
 	"scripts": {
 		"phpstan": "./phpstan/phpstan",

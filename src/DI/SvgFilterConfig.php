@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Nelson\Latte\Filters\SvgFilter\DI;
+namespace Nelson\SvgFilter\DI;
 
 final class SvgFilterConfig
 {

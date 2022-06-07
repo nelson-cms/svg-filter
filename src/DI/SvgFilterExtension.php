@@ -1,11 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Nelson\Latte\Filters\SvgFilter\DI;
+namespace Nelson\SvgFilter\DI;
 
-use Nelson\Latte\Filters\SvgFilter\SvgFilter;
+use Exception;
+use Nelson\SvgFilter\SvgFilter;
 use Nette\DI\CompilerExtension;
+use Nette\DI\Definitions\Definition;
 use Nette\DI\Definitions\FactoryDefinition;
+use Nette\DI\Definitions\ServiceDefinition;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
 
@@ -28,22 +31,36 @@ final class SvgFilterExtension extends CompilerExtension
 		$config = $this->getConfig();
 		$builder->addDefinition($this->prefix('default'))
 			->setFactory(SvgFilter::class)
-			->addSetup('setup', [$config]);
+			->setArgument('config', $config);
 	}
 
 
+	/**
+	 * @throws Exception
+	 */
 	public function beforeCompile(): void
+	{
+		$latteFactory = $this->getLatteFactoryDefinition();
+		$latteFactory->addSetup('addFilter', ['svg', [$this->prefix('@default'), 'inline']]);
+	}
+
+
+	/**
+	 * @return ServiceDefinition
+	 * @throws Exception
+	 */
+	private function getLatteFactoryDefinition(): Definition
 	{
 		$builder = $this->getContainerBuilder();
 
-		// Latte filter
 		$latteFactoryName = 'latte.latteFactory';
-		if ($builder->hasDefinition($latteFactoryName)) {
-			/** @var FactoryDefinition $latteFactory */
-			$latteFactory = $builder->getDefinition($latteFactoryName);
-			$latteFactory
-				->getResultDefinition()
-				->addSetup('addFilter', ['svg', [$this->prefix('@default'), 'inline']]);
+
+		if (!$builder->hasDefinition($latteFactoryName)) {
+			throw new Exception(sprintf('Service %s not found.', $latteFactoryName));
 		}
+
+		/** @var FactoryDefinition $latteFactory */
+		$latteFactory = $builder->getDefinition($latteFactoryName);
+		return $latteFactory->getResultDefinition();
 	}
 }

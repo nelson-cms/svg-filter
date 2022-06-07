@@ -1,11 +1,11 @@
 <?php
+declare(strict_types=1);
 
-namespace Nelson\Latte\Filters\SvgFilter\Test;
+namespace Nelson\SvgFilter\Tests;
 
-use Nelson\Latte\Filters\SvgFilter\DI\SvgFilterConfig;
-use Nelson\Latte\Filters\SvgFilter\SvgFilter;
+use Nelson\SvgFilter\DI\SvgFilterConfig;
+use Nelson\SvgFilter\SvgFilter;
 use Nette\Caching\Storages\MemoryStorage;
-use Nette\Utils\Html;
 use PHPUnit\Framework\TestCase;
 
 class SvgFilterTest extends TestCase
@@ -19,12 +19,11 @@ class SvgFilterTest extends TestCase
 	{
 		parent::setUpBeforeClass();
 
-		$storage = new MemoryStorage();
-		$config = new SvgFilterConfig();
+		$storage = new MemoryStorage;
+		$config = new SvgFilterConfig;
 		$config->assetsPath = self::$assetsPath;
 
-		static::$svgFilter = new SvgFilter($storage);
-		static::$svgFilter->setup($config);
+		static::$svgFilter = new SvgFilter($storage, $config);
 	}
 
 
