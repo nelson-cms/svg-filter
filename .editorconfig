@@ -12,3 +12,6 @@ trim_trailing_whitespace = true
 
 [{*.svg, .htaccess, *.expected}]
 insert_final_newline = false
+
+[*.svg.expected]
+indent_style = tab

@@ -10,18 +10,23 @@
 		"ext-dom": "*"
 	},
 	"require-dev": {
-		"nette/tester": "^2.0",
 		"phpstan/extension-installer": "^1.0",
 		"phpstan/phpstan": "^1.0.0",
-		"phpstan/phpstan-nette": "^1.0.0"
+		"phpstan/phpstan-nette": "^1.0.0",
+		"phpunit/phpunit": "^9.0.0",
+		"tracy/tracy": "^2.9"
 	},
 	"autoload": {
 		"psr-4": {
 			"Nelson\\Latte\\Filters\\SvgFilter\\": "src/"
 		}
 	},
+	"autoload-dev": {
+		"psr-4": { "Nelson\\Latte\\Filters\\SvgFilter\\Test\\": "tests/" }
+	},
 	"scripts": {
-		"phpstan": "./phpstan/phpstan"
+		"phpstan": "./phpstan/phpstan",
+		"tests": "./vendor/bin/phpunit --configuration tests/phpunit.xml tests"
 	},
 	"config": {
 		"allow-plugins": {
