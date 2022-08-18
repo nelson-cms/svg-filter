@@ -54,10 +54,19 @@ class SvgFilterTest extends TestCase
 	}
 
 
+	public function testSvgClass(): void
+	{
+		$expected = file_get_contents(self::$assetsPath . 'class.svg.expected');
+		$actual = self::$svgFilter->inline(self::$svgFile, class: 'big')->toHtml();
+
+		$this->assertSame($expected, $actual);
+	}
+
+
 	public function testSvgAll(): void
 	{
 		$expected = file_get_contents(self::$assetsPath . 'all.svg.expected');
-		$actual = self::$svgFilter->inline(self::$svgFile, 50, 50, 'currentColor')->toHtml();
+		$actual = self::$svgFilter->inline(self::$svgFile, 50, 50, 'currentColor', 'big')->toHtml();
 
 		$this->assertSame($expected, $actual);
 	}

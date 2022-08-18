@@ -31,7 +31,8 @@ final class SvgFilter
 		string $file,
 		float $width = null,
 		float $height = null,
-		string $fill = null
+		string $fill = null,
+		string $class = null,
 	): ?Html {
 		if (!empty($file)) {
 			$filepath = $this->config->assetsPath . $file;
@@ -43,6 +44,7 @@ final class SvgFilter
 
 			$this->applyDimensions($element, $width, $height);
 			$this->applyFill($element, $fill);
+			$this->applyClass($element, $class);
 
 			$html = $this->saveHtml($document) ?? '';
 			return Html::el()->setHtml($html);
@@ -80,7 +82,7 @@ final class SvgFilter
 
 	private function applyDimensions(DOMElement $element, ?float $width, ?float $height): DOMElement
 	{
-		if (empty($width) || empty($height)) {
+		if ($width === null || $height === null) {
 			return $element;
 		}
 
@@ -93,11 +95,23 @@ final class SvgFilter
 
 	private function applyFill(DOMElement $element, ?string $fill): DOMElement
 	{
-		if (empty($fill)) {
+		if ($fill === null) {
 			return $element;
 		}
 
 		$element->setAttribute('fill', $fill);
+
+		return $element;
+	}
+
+
+	private function applyClass(DOMElement $element, ?string $class): DOMElement
+	{
+		if ($class === null) {
+			return $element;
+		}
+
+		$element->setAttribute('class', $class);
 
 		return $element;
 	}
