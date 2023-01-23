@@ -37,7 +37,7 @@ final class SvgFilter
 		if (!empty($file)) {
 			$filepath = $this->config->assetsPath . $file;
 
-			// Has to be string because of cache
+			// Has to be a string because of cache
 			$rawString = $this->cache->call([$this, 'getSvg'], $filepath);
 			$document = $this->getDOMDocument($rawString);
 			$element = $this->getSVGElement($document);

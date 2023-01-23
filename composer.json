@@ -4,8 +4,8 @@
 	"require": {
 		"php": "^8.0",
 		"nette/di": "^3.0",
-		"nette/utils": "^3.0",
-		"latte/latte": "^2.5 | ^3.0",
+		"nette/utils": "^3.0 || ^4.0",
+		"latte/latte": "^3.0",
 		"nette/caching": "^3.0",
 		"ext-dom": "*"
 	},
@@ -26,8 +26,8 @@
 		"psr-4": { "Nelson\\SvgFilter\\Tests\\": "tests/" }
 	},
 	"scripts": {
-		"phpstan": "./phpstan/phpstan",
-		"tests": "./vendor/bin/phpunit --configuration tests/phpunit.xml tests"
+		"phpstan": "@php ./vendor/bin/phpstan analyse --configuration ./phpstan/phpstan.neon --memory-limit 512M",
+		"tests": "@php ./vendor/bin/phpunit --configuration tests/phpunit.xml tests"
 	},
 	"config": {
 		"allow-plugins": {
