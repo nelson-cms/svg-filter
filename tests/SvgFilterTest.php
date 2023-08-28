@@ -23,51 +23,51 @@ class SvgFilterTest extends TestCase
 		$config = new SvgFilterConfig;
 		$config->assetsPath = self::$assetsPath;
 
-		static::$svgFilter = new SvgFilter($storage, $config);
+		self::$svgFilter = new SvgFilter($storage, $config);
 	}
 
 
 	public function testSvgBasic(): void
 	{
 		$expected = file_get_contents(self::$assetsPath . 'basic.svg.expected');
-		$actual = self::$svgFilter->inline(self::$svgFile)->toHtml();
+		$actual = self::$svgFilter->inline(self::$svgFile)?->toHtml();
 
-		$this->assertSame($expected, $actual);
+		self::assertSame($expected, $actual);
 	}
 
 
 	public function testSvgDimensions(): void
 	{
 		$expected = file_get_contents(self::$assetsPath . 'dimensions.svg.expected');
-		$actual = self::$svgFilter->inline(self::$svgFile, 50, 50)->toHtml();
+		$actual = self::$svgFilter->inline(self::$svgFile, 50, 50)?->toHtml();
 
-		$this->assertSame($expected, $actual);
+		self::assertSame($expected, $actual);
 	}
 
 
 	public function testSvgFill(): void
 	{
 		$expected = file_get_contents(self::$assetsPath . 'fill.svg.expected');
-		$actual = self::$svgFilter->inline(self::$svgFile, fill: 'currentColor')->toHtml();
+		$actual = self::$svgFilter->inline(self::$svgFile, fill: 'currentColor')?->toHtml();
 
-		$this->assertSame($expected, $actual);
+		self::assertSame($expected, $actual);
 	}
 
 
 	public function testSvgClass(): void
 	{
 		$expected = file_get_contents(self::$assetsPath . 'class.svg.expected');
-		$actual = self::$svgFilter->inline(self::$svgFile, class: 'big')->toHtml();
+		$actual = self::$svgFilter->inline(self::$svgFile, class: 'big')?->toHtml();
 
-		$this->assertSame($expected, $actual);
+		self::assertSame($expected, $actual);
 	}
 
 
 	public function testSvgAll(): void
 	{
 		$expected = file_get_contents(self::$assetsPath . 'all.svg.expected');
-		$actual = self::$svgFilter->inline(self::$svgFile, 50, 50, 'currentColor', 'big')->toHtml();
+		$actual = self::$svgFilter->inline(self::$svgFile, 50, 50, 'currentColor', 'big')?->toHtml();
 
-		$this->assertSame($expected, $actual);
+		self::assertSame($expected, $actual);
 	}
 }

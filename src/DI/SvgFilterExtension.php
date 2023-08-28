@@ -15,7 +15,7 @@ use Nette\Schema\Schema;
 final class SvgFilterExtension extends CompilerExtension
 {
 
-	/** @var SvgFilterConfig[] */
+	/** @var SvgFilterConfig */
 	public $config;
 
 

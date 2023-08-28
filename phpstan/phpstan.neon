@@ -3,9 +3,11 @@ parameters:
 
 	paths:
 		- %currentWorkingDirectory%/src/
-#		- %currentWorkingDirectory%/tests/
+		- %currentWorkingDirectory%/tests/
 
 	excludePaths:
 		- %currentWorkingDirectory%/tests/temp/*
 
-	level: 8
+	level: max
+
+	reportMaybesInPropertyPhpDocTypes: false

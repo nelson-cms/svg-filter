@@ -20,8 +20,8 @@ final class SvgFilter
 
 
 	public function __construct(
-		private Storage $cacheStorage,
-		private SvgFilterConfig $config,
+		private readonly Storage $cacheStorage,
+		private readonly SvgFilterConfig $config,
 	) {
 		$this->cache = new Cache($this->cacheStorage, $config->cacheNS);
 	}
@@ -34,23 +34,23 @@ final class SvgFilter
 		string $fill = null,
 		string $class = null,
 	): ?Html {
-		if (!empty($file)) {
-			$filepath = $this->config->assetsPath . $file;
-
-			// Has to be a string because of cache
-			$rawString = $this->cache->call([$this, 'getSvg'], $filepath);
-			$document = $this->getDOMDocument($rawString);
-			$element = $this->getSVGElement($document);
-
-			$this->applyDimensions($element, $width, $height);
-			$this->applyFill($element, $fill);
-			$this->applyClass($element, $class);
-
-			$html = $this->saveHtml($document) ?? '';
-			return Html::el()->setHtml($html);
+		if (strlen($file) === 0) {
+			return null;
 		}
 
-		return null;
+		$filepath = $this->config->assetsPath . $file;
+
+		/** @var string $rawString Has to be a string because of cache */
+		$rawString = $this->cache->call([$this, 'getSvg'], $filepath);
+		$document = $this->getDOMDocument($rawString);
+		$element = $this->getSVGElement($document);
+
+		$this->applyDimensions($element, $width, $height);
+		$this->applyFill($element, $fill);
+		$this->applyClass($element, $class);
+
+		$html = $this->saveHtml($document) ?? '';
+		return Html::el()->setHtml($html);
 	}
 
 
@@ -64,7 +64,7 @@ final class SvgFilter
 		$result = new DOMDocument;
 		$result->appendChild($result->importNode($element, true));
 
-		return $this->saveHTML($result);
+		return $this->saveHtml($result);
 	}
 
 
