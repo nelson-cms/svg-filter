@@ -5,6 +5,9 @@ namespace Nelson\SvgFilter;
 
 use DOMDocument;
 use DOMElement;
+use DOMNode;
+use DOMNodeList;
+use DOMXPath;
 use Nelson\SvgFilter\DI\SvgFilterConfig;
 use Nette\Caching\Cache;
 use Nette\Caching\Storage;
@@ -61,10 +64,27 @@ final class SvgFilter
 		$document = $this->getDOMDocument($content);
 		$element = $this->getSVGElement($document);
 
-		$result = new DOMDocument;
-		$result->appendChild($result->importNode($element, true));
+		$dom = new DOMDocument;
+		$dom->appendChild($dom->importNode($element, true));
 
-		return $this->saveHtml($result);
+		$this->removeComments($dom);
+		return $this->saveHtml($dom);
+	}
+
+
+	private function removeComments(DOMDocument $document): void
+	{
+		$xpath = new DOMXPath($document);
+		$comments = $xpath->query('//comment()');
+
+		if (!$comments instanceof DOMNodeList) {
+			return;
+		}
+
+		/** @var DOMNode $comment */
+		foreach ($comments as $comment) {
+			$comment->parentNode?->removeChild($comment);
+		}
 	}
 
 
