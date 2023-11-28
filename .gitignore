@@ -3,7 +3,7 @@
 
 # Files
 composer.lock
-.phpunit.result.cache
+tests/.phpunit.cache/
 
 # Dirs
 vendor/
