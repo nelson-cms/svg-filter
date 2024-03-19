@@ -36,6 +36,7 @@ final class SvgFilter
 		float $height = null,
 		string $fill = null,
 		string $class = null,
+		string $title = null,
 	): ?Html {
 		if (strlen($file) === 0) {
 			return null;
@@ -51,6 +52,7 @@ final class SvgFilter
 		$this->applyDimensions($element, $width, $height);
 		$this->applyFill($element, $fill);
 		$this->applyClass($element, $class);
+		$this->applyTitle($element, $title);
 
 		$html = $this->saveHtml($document) ?? '';
 		return Html::el()->setHtml($html);
@@ -132,6 +134,18 @@ final class SvgFilter
 		}
 
 		$element->setAttribute('class', $class);
+
+		return $element;
+	}
+
+
+	private function applyTitle(DOMElement $element, ?string $title): DOMElement
+	{
+		if ($title === null) {
+			return $element;
+		}
+
+		$element->setAttribute('title', $title);
 
 		return $element;
 	}
