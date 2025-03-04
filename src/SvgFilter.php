@@ -30,6 +30,7 @@ final class SvgFilter
 	}
 
 
+	/** @param array<string, string> $attributes */
 	public function inline(
 		string $file,
 		float $width = null,
@@ -37,6 +38,7 @@ final class SvgFilter
 		string $fill = null,
 		string $class = null,
 		string $title = null,
+		array $attributes = [],
 	): ?Html {
 		if (strlen($file) === 0) {
 			return null;
@@ -53,6 +55,7 @@ final class SvgFilter
 		$this->applyFill($element, $fill);
 		$this->applyClass($element, $class);
 		$this->applyTitle($element, $title);
+		$this->applyAttributes($element, $attributes);
 
 		$html = $this->saveHtml($document) ?? '';
 		return Html::el()->setHtml($html);
@@ -164,6 +167,17 @@ final class SvgFilter
 	{
 		/** @var DOMElement $element */
 		$element = $document->getElementsByTagName('svg')->item(0);
+		return $element;
+	}
+
+
+	/** @param array<string, string> $attributes */
+	private function applyAttributes(DOMElement $element, array $attributes): DOMElement
+	{
+		foreach ($attributes as $name => $value) {
+			$element->setAttribute($name, $value);
+		}
+
 		return $element;
 	}
 }

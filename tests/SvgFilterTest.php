@@ -72,6 +72,18 @@ class SvgFilterTest extends TestCase
 	}
 
 
+	public function testSvgAttributes(): void
+	{
+		$expected = file_get_contents(self::$assetsPath . 'attributes.svg.expected');
+		$actual = self::$svgFilter->inline(self::$svgFile, attributes: [
+			'aria-label' => 'circle',
+			'role' => 'img',
+		])?->toHtml();
+
+		self::assertSame($expected, $actual);
+	}
+
+
 	public function testSvgAll(): void
 	{
 		$expected = file_get_contents(self::$assetsPath . 'all.svg.expected');
