@@ -22,11 +22,11 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Nelson\\SvgFilter\\": "src/"
+			"NelsonCms\\SvgFilter\\": "src/"
 		}
 	},
 	"autoload-dev": {
-		"psr-4": { "Nelson\\SvgFilter\\Tests\\": "tests/" }
+		"psr-4": { "NelsonCms\\SvgFilter\\Tests\\": "tests/" }
 	},
 	"config": {
 		"allow-plugins": {

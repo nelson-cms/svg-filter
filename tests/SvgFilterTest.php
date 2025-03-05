@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Nelson\SvgFilter\Tests;
+namespace NelsonCms\SvgFilter\Tests;
 
-use Nelson\SvgFilter\DI\SvgFilterConfig;
-use Nelson\SvgFilter\SvgFilter;
+use NelsonCms\SvgFilter\DI\SvgFilterConfig;
+use NelsonCms\SvgFilter\SvgFilter;
 use Nette\Caching\Storages\MemoryStorage;
 use PHPUnit\Framework\TestCase;
 

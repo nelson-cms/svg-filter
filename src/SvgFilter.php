@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Nelson\SvgFilter;
+namespace NelsonCms\SvgFilter;
 
 use DOMDocument;
 use DOMElement;
 use DOMNode;
 use DOMNodeList;
 use DOMXPath;
-use Nelson\SvgFilter\DI\SvgFilterConfig;
+use NelsonCms\SvgFilter\DI\SvgFilterConfig;
 use Nette\Caching\Cache;
 use Nette\Caching\Storage;
 use Nette\SmartObject;

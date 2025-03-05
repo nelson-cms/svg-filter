@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Nelson\SvgFilter\DI;
+namespace NelsonCms\SvgFilter\DI;
 
 use Exception;
-use Nelson\SvgFilter\SvgFilter;
+use NelsonCms\SvgFilter\SvgFilter;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\Definition;
 use Nette\DI\Definitions\FactoryDefinition;
