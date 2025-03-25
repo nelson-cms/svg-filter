@@ -33,11 +33,11 @@ final class SvgFilter
 	/** @param array<string, string> $attributes */
 	public function inline(
 		string $file,
-		float $width = null,
-		float $height = null,
-		string $fill = null,
-		string $class = null,
-		string $title = null,
+		?float $width = null,
+		?float $height = null,
+		?string $fill = null,
+		?string $class = null,
+		?string $title = null,
 		array $attributes = [],
 	): ?Html {
 		if (strlen($file) === 0) {
